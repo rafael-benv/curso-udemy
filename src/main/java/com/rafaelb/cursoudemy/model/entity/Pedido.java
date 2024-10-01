@@ -2,10 +2,9 @@ package com.rafaelb.cursoudemy.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
@@ -15,17 +14,7 @@ import lombok.Data;
 @Data
 @Builder
 public class Pedido {
-	public static enum QPD {
-		Q,
-		P,
-		D
-	}
-	
-	public static enum STATUS {
-		PENDENTE,
-		COMPLETO
-	}
-
+	@Id
 	@Column (name = "id")
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -35,12 +24,4 @@ public class Pedido {
 	
 	@Column (name = "obs")
 	private String obs;
-
-	@Column (name = "status")
-	@Enumerated (value = EnumType.STRING)
-	private String status;
-
-	@Column (name = "qpd")
-	@Enumerated (value = EnumType.STRING)
-	private Character qpd;
 }
