@@ -51,4 +51,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 			throw new RegraException("Ja existe esse usuario.");
 		}
 	}
+
+	@Override
+	public Optional<Usuario> obterPorId(Long id) {
+		return repository.findById(id);
+	}
 }
