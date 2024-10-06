@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rafaelb.cursoudemy.api.dto.PedidoDto;
+import com.rafaelb.cursoudemy.api.dto.PedidoStatusDto;
 import com.rafaelb.cursoudemy.exceptions.RegraException;
 import com.rafaelb.cursoudemy.model.entity.Pedido;
 import com.rafaelb.cursoudemy.model.entity.PedidoQpd;
@@ -30,7 +31,7 @@ public class PedidoResource {
 	private final UsuarioService usuarioService;
 	
 	@PostMapping
-	public ResponseEntity salvar (@RequestBody PedidoDto dto) {
+	public ResponseEntity salvar(@RequestBody PedidoDto dto) {
 		try {
 			Pedido pedido = converter(dto);
 			pedido = service.salvar(pedido);
@@ -54,6 +55,25 @@ public class PedidoResource {
 				return ResponseEntity.badRequest().body(e.getMessage());
 			}
 		}).orElseGet( () -> new ResponseEntity("Pedido nao encontrado", HttpStatus.BAD_REQUEST));
+	}
+	
+	@PutMapping("{id}/atualizar")
+	public ResponseEntity atualizarStatus(@PathVariable("id") Long id, @RequestBody PedidoStatusDto dto) {
+		return service.obterPorId(id).map( entity -> {
+			try {
+				PedidoStatus pedido = PedidoStatus.valueOf(dto.getStatus());
+				if (pedido == null) {
+					return ResponseEntity.badRequest().body("Status invalido");
+				}
+				entity.setStatus(pedido);
+				service.atualizar(entity);
+				return ResponseEntity.ok(entity);
+			}
+			catch (RegraException e) {
+				return ResponseEntity.badRequest().body(e.getMessage());
+			}
+		}).orElseGet( () -> new ResponseEntity("Pedido nao encontrado", HttpStatus.BAD_REQUEST));
+		
 	}
 	
 	@DeleteMapping("{id}")
@@ -81,6 +101,9 @@ public class PedidoResource {
 		}
 		if (dto.getStatus() != null) {
 			pedido.setStatus(PedidoStatus.valueOf(dto.getStatus()));
+		}
+		else {
+			pedido.setStatus(PedidoStatus.PENDENTE);
 		}
 		pedido.setId_usuario(user);
 
