@@ -64,7 +64,7 @@ public class PedidoServiceImpl implements PedidoService {
 			throw new RegraException("Informe uma quantidade valida");
 		}
 		if(pedido.getQpd() == null) {
-			throw new RegraException("Informe se e quantidade, peso ou duzia");
+			throw new RegraException("Informe se e quantidade, peso, ou duzia");
 		}
 	}
 
