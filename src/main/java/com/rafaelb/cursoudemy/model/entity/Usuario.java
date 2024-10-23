@@ -1,5 +1,7 @@
 package com.rafaelb.cursoudemy.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,5 +29,6 @@ public class Usuario {
 	private String nome;
 
 	@Column (name = "senha")
+	@JsonIgnore
 	private String senha;
 }
